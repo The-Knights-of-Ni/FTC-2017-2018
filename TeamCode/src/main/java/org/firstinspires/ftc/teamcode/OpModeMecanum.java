@@ -69,6 +69,8 @@ public class OpModeMecanum extends LinearOpMode {
             telemetry.addData("Right Stick X", rightStickX);
 
             telemetry.addData("", "");
+            telemetry.addData("Left Clamp postion", leftClamp.getPosition());
+            telemetry.addData("Right Clamp position", rightClamp.getPosition());
             telemetry.addData("Left Rear Power", lrDrive.getPower());
             telemetry.addData("Left Front Power", lfDrive.getPower());
             telemetry.addData("Right Rear Power", rrDrive.getPower());
