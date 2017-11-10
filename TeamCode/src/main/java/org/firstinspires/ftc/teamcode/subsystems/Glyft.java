@@ -30,7 +30,7 @@ public class Glyft {
         this.OpModeTime = OpModeTime;
     }
 
-    // TO DO: specific functions + positions
+    // TO DO: specific functions + positions + test
     public GlyftState getGlyftState() {
         return glyftState;
     }
