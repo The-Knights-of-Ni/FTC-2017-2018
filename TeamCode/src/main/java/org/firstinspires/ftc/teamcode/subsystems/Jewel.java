@@ -17,10 +17,9 @@ public class Jewel extends Subsystem {
     private ColorSensor leftSensor;
     private ColorSensor rightSensor;
 
-    public Jewel(Servo arm, ColorSensor leftSensor, ColorSensor rightSensor, ElapsedTime timer) {
+    public Jewel(Servo arm, ColorSensor leftSensor, ElapsedTime timer) {
         this.arm = arm;
         this.leftSensor = leftSensor;
-        this.rightSensor = rightSensor;
         this.timer = timer;
     }
 
@@ -35,18 +34,17 @@ public class Jewel extends Subsystem {
     }
 
     /** Returns true if RED | BLUE; false if BLUE | RED */
-    public boolean detectJewels() throws JewelDetectionException {
+    public boolean detectJewels1(){
         //TODO: Refine detection logic
         int leftRed = leftSensor.red();
         int leftBlue = leftSensor.blue();
-        int rightRed = rightSensor.red();
-        int rightBlue = rightSensor.blue();
-
-        if (leftRed > leftBlue && rightRed < rightBlue && leftRed > rightRed && leftBlue < rightBlue) //RED | BLUE
-            return true;
-        if (leftRed < leftBlue && rightRed > rightBlue && leftRed < rightRed && leftBlue > rightBlue) //BLUE | RED
-            return false;
-        throw new JewelDetectionException();
+        return leftRed > leftBlue;
+    }
+    public boolean detectJewels2() throws JewelDetectionException {
+        //TODO: Refine detection logic
+        int leftRed = leftSensor.red();
+        int leftBlue = leftSensor.blue();
+        return leftRed > leftBlue;
     }
 
     /** Error thrown when jewel detection fails */
