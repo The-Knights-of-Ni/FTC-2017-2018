@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Glyft.GlyftState.STOPPED;
+
 /**
  * Created by Cat on 11/10/17.
  */
