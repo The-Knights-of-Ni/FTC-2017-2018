@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-import static com.sun.tools.doclint.HtmlTag.I;
-
 /**
  * Created by AndrewC on 11/25/2017.
  */
 @Autonomous(name = "Mark1Auto")
 public class Mark1Auto extends LinearOpMode {
+    private Robot robot;
+    private ElapsedTime timer;
 
     //DO WITH ENCODERS
     static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // AM Orbital 20 motor
@@ -27,39 +27,22 @@ public class Mark1Auto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException
     {
-        ElapsedTime timer = new ElapsedTime();
-        Robot robot = new Robot(this, timer);
-<<<<<<< HEAD
-=======
-
->>>>>>> 4ee81ecfb313c83456894bcee01c0b4ff7dd873c
+        timer = new ElapsedTime();
+        robot = new Robot(this, timer);
         robot.init();
         robot.jewel.retract();
 
         telemetry.addLine("Auto Mk1 start");
+        telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        telemetry.addData("Status", "Resetting Encoders");    //
-        telemetry.update();
-
-
-        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.drive.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
         robot.jewel.deploy();
         sleep(500);
-<<<<<<< HEAD
-=======
 
->>>>>>> 4ee81ecfb313c83456894bcee01c0b4ff7dd873c
         while(opModeIsActive()){
             int countForColor = 0;
             boolean isRed = robot.jewel.detectJewels1();
@@ -67,23 +50,20 @@ public class Mark1Auto extends LinearOpMode {
             telemetry.addData("Color", isRed);
             telemetry.update();
 
-            if (isRed == false)
+            if (!isRed)
             {
                 telemetry.addData("detected Blue", isRed);
                 telemetry.update();
-                driveBackward(1000, robot);
+                driveBackward(1000);
                 robot.jewel.retract();
-                driveForward(1000, robot);
+                driveForward(1000);
             }
 
-            driveForward(1000, robot);
+            driveForward(1000);
             robot.jewel.retract();
 
             //stop moving
-            robot.frontRight.setPower(0);
-            robot.frontLeft.setPower(0);
-            robot.rearRight.setPower(0);
-            robot.rearLeft.setPower(0);
+            robot.drive.stop();
             break;
 
             //move forward - using encoders
@@ -96,21 +76,15 @@ public class Mark1Auto extends LinearOpMode {
 
     }
 
-    public void driveBackward(int timeLen, Robot robot)
+    public void driveBackward(int timeLen)
     {
-        robot.frontRight.setPower(-0.5);
-        robot.frontLeft.setPower(-0.5);
-        robot.rearRight.setPower(-0.5);
-        robot.rearLeft.setPower(-0.5);
+        robot.drive.setPower(-0.5);
         sleep(timeLen);
     }
 
-    public void driveForward(int timeLen, Robot robot)
+    public void driveForward(int timeLen)
     {
-        robot.frontRight.setPower(0.5);
-        robot.frontLeft.setPower(-0.5);
-        robot.rearRight.setPower(-0.5);
-        robot.rearLeft.setPower(0.5);
+        robot.drive.setPower(0.5);
         sleep(timeLen);
     }
 

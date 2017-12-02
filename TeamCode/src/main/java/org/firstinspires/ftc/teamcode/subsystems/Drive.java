@@ -48,4 +48,11 @@ public class Drive extends Subsystem {
         rearLeft.setZeroPowerBehavior(mode);
         rearRight.setZeroPowerBehavior(mode);
     }
+
+    public void setPower(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+        rearLeft.setPower(power);
+        rearRight.setPower(power);
+    }
 }
