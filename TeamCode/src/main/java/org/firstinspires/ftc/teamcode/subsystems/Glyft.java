@@ -11,6 +11,10 @@ import static org.firstinspires.ftc.teamcode.subsystems.Glyft.GlyftState.STOPPED
  */
 
 public class Glyft {
+    private static final double LEFT_OPEN_POSITION = 0.30;
+    private static final double RIGHT_OPEN_POSITION = 0.45;
+    private static final double LEFT_CLOSED_POSITION = 0.15;
+    private static final double RIGHT_CLOSED_POSITION = 0.55;
 
     public Servo squeezerLeft;
     public Servo squeezerRight;
@@ -46,9 +50,19 @@ public class Glyft {
         squeezerRight.setPosition(1);
     }
 
-    public void glyphLift() {
-        glyftMotor1.setPower(0.5); // need to test
-        glyftMotor2.setPower(0.5);
+    public void openSqueezers() {
+        squeezerLeft.setPosition(LEFT_OPEN_POSITION);
+        squeezerRight.setPosition(RIGHT_OPEN_POSITION);
+    }
+
+    public void closeSqueezers() {
+        squeezerLeft.setPosition(LEFT_CLOSED_POSITION);
+        squeezerRight.setPosition(RIGHT_CLOSED_POSITION);
+    }
+
+    public void setPower(double power) {
+        glyftMotor1.setPower(power); // need to test
+        glyftMotor2.setPower(power);
     }
 
 }

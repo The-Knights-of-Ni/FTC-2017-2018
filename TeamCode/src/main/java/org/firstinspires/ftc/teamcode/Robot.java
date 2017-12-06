@@ -4,7 +4,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,12 +65,23 @@ public class Robot {
         rightGlyftMotor = (DcMotorEx) hardwareMap.dcMotor.get("r_glyft");
         relicMotor = (DcMotorEx) hardwareMap.dcMotor.get("relic");
 
+        frontRightDriveMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRightDriveMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightGlyftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        frontLeftDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearLeftDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearRightDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftGlyftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightGlyftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //Servos
         jewelServo = hardwareMap.servo.get("jewel_servo");
-        leftSqueezerServo = hardwareMap.servo.get("left_squeezer");
-        rightSqueezerServo = hardwareMap.servo.get("right_squeezer");
-        relicWristServo = hardwareMap.servo.get("wrist_relic");
-        relicClawServo = hardwareMap.servo.get("claw_relic");
+        leftSqueezerServo = hardwareMap.servo.get("left_grabber");
+        rightSqueezerServo = hardwareMap.servo.get("right_grabber");
+        relicWristServo = hardwareMap.servo.get("relic_wrist");
+        relicClawServo = hardwareMap.servo.get("relic_claw");
 
         //Sensors
         imu = hardwareMap.get(BNO055IMU.class, "imu");

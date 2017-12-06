@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Jewel extends Subsystem {
     //Constants
     private static final double DEPLOYED_POSITION = 0.02;
-    private static final double STORED_POSITION = 0.4;
+    private static final double STORED_POSITION = 0.5;
 
     //Servos
     private Servo arm;

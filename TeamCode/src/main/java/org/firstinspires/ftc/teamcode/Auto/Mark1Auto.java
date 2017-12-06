@@ -1,10 +1,16 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.Auto;
+
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Robot;
 
 /**
@@ -12,37 +18,122 @@ import org.firstinspires.ftc.teamcode.Robot;
  */
 @Autonomous(name = "Mark1Auto")
 public class Mark1Auto extends LinearOpMode {
+    private static final String TAG = "Mark1Auto";
+
     private Robot robot;
     private ElapsedTime timer;
 
+    private VuforiaLocalizer vuforia;
+    private VuforiaTrackables relicTrackables;
+    private VuforiaTrackable relicTemplate;
+
     //DO WITH ENCODERS
-    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // AM Orbital 20 motor
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    private static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // AM Orbital 20 motor
+    private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    private static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    private static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
+    private static final double     DRIVE_SPEED             = 0.6;
+    private static final double     TURN_SPEED              = 0.5;
+
+    //Timing Constants
+    private static final int PICTOGRAPH_TIMEOUT = 5000;
+    private static final int JEWEL_DEPLOY_WAIT = 1500;
+
+    //Encoder Constants
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
         timer = new ElapsedTime();
         robot = new Robot(this, timer);
-        robot.init();
-        robot.jewel.retract();
 
-        telemetry.addLine("Auto Mk1 start");
-        telemetry.addData("Status", "Resetting Encoders");
-        telemetry.update();
-
-        robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.drive.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        initRobot();
         waitForStart();
-        robot.jewel.deploy();
-        sleep(500);
 
+        log("Started Mark 1 Auto");
+
+        //Grab glyft and raise lift
+        robot.glyft.closeSqueezers();
+        sleep(500);
+        double startTime = timer.seconds();
+        while (opModeIsActive() && (timer.seconds() - startTime) < 0.25) {
+            robot.glyft.setPower(0.50);
+        }
+        robot.glyft.setPower(0);
+        sleep(500);
+        /*
+        //Read pictograph
+        RelicRecoveryVuMark vuMark = null;
+        relicTrackables.activate();
+        double startTime = timer.seconds();
+        while ((timer.seconds() - startTime) < PICTOGRAPH_TIMEOUT) {
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                break;
+            }
+        }
+        relicTrackables.deactivate();
+        log("Finished reading pictograph: " + vuMark);
+        */
+
+        //Deploy jewel arm and read jewel color
+        robot.jewel.deploy();
+        sleep(JEWEL_DEPLOY_WAIT);
+        boolean jewelIsRed = robot.jewel.detectJewels1();
+        log("Jewel Detected: " + (jewelIsRed ? "RED | BLUE" : "BLUE | RED"));
+
+        while (opModeIsActive()) {}
+
+        //Knock off correct jewel
+
+
+        /*
+        timer.reset();
+        while (opModeIsActive() && timer.seconds() < (isRed ? 0.5 : 1.5)) {
+            robot.drive.setPower(0.08 * (isRed ? -1 : 1));
+        }
+        robot.drive.stop();
+        */
+
+        /*
+        timer.reset();
+
+        if (isRed) {
+            robot.drive.turn(0.1);
+            while (opModeIsActive() && robot.drive.getYaw() >= -10) {
+                telemetry.addData("IMU Yaw", robot.drive.getYaw());
+                telemetry.update();
+            }
+            robot.drive.stop();
+            robot.jewel.retract();
+            sleep(1000);
+            robot.drive.turn(-0.1);
+            while (opModeIsActive() && robot.drive.getYaw() <= 0) {
+                telemetry.addData("IMU Yaw", robot.drive.getYaw());
+                telemetry.update();
+            }
+            robot.drive.stop();
+        } else {
+            while (opModeIsActive() && timer.seconds() < 1.5) {
+                robot.drive.setPower(0.08);
+            }
+            robot.drive.stop();
+        }
+
+        while (opModeIsActive()) {
+
+        }
+
+        /*
+        while (opModeIsActive()) {
+            if (isRed) {
+                robot.drive.turn(0.1);
+            } else {
+                robot.drive.setPower(0.08);
+            }
+        }
+        */
+        /*
         while(opModeIsActive()){
             int countForColor = 0;
             boolean isRed = robot.jewel.detectJewels1();
@@ -71,8 +162,7 @@ public class Mark1Auto extends LinearOpMode {
 
             //then use PID control to go to pictograph and read it
         }
-
-
+        */
 
     }
 
@@ -152,5 +242,31 @@ public class Mark1Auto extends LinearOpMode {
         double rrPower = r * Math.cos(robotAngle) - rightStickX;
         double rfPower = r * Math.sin(robotAngle) - rightStickX;
         return new double[]{lrPower, lfPower, rrPower, rfPower};
+    }
+
+    private void initRobot() {
+        robot.init();
+        robot.jewel.retract();
+        robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.drive.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Vuforia initialization
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.vuforiaLicenseKey = "AX1T/JH/////AAAAGWQh21MbJEIhpE//dkoSovcwBwhbe6+121U+fGQaCJZI0cDQka2Bqcnc1N9dRlzyr5ZwjGPLUqxXId7+l/yUFBV1v66pF5nuD5JJOr9IVM22ZUxMSQesMrpCqfzGowHAv/dTDZmuqOxfqazZ6xeJ5V/V/2HdwGFDCrTXbZd4PzSwaOQed48I7XtIvu2m3nEJAb+aAC6DT78HHLRIFStmgfS4QglTEy+M7JOtDkc5u5k5CQhk9hwNsea4nDqfVf9XJjKLJJFhTat0IdiPz8BIrsNWxP8S7EiZLaWdanHJIOdP2NhokmI0jkLgPuRLkC7BvorDDeVI+pdutDMjN9kf/b11uGyrf6fJ4AySTe1+R9m/";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+
+        telemetry.addLine("Finished Initialization. Waiting for start.");
+        telemetry.update();
+        Log.d(TAG, "Finished Initialization. Waiting for start.");
+    }
+
+    private void log(String message) {
+        telemetry.addLine(message);
+        telemetry.update();
+        Log.d(TAG, message);
     }
 }

@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /** Mecanum drivetrain subsystem */
 public class Drive extends Subsystem {
     //DC Motors
-    private DcMotorEx frontLeft;
-    private DcMotorEx frontRight;
-    private DcMotorEx rearLeft;
-    private DcMotorEx rearRight;
+    public DcMotorEx frontLeft;
+    public DcMotorEx frontRight;
+    public DcMotorEx rearLeft;
+    public DcMotorEx rearRight;
 
     //Sensors
     private BNO055IMU imu;
@@ -23,6 +23,7 @@ public class Drive extends Subsystem {
         this.rearRight = rearRight;
         this.imu = imu;
         this.timer = timer;
+        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /** Stops all drive motors */
@@ -49,10 +50,21 @@ public class Drive extends Subsystem {
         rearRight.setZeroPowerBehavior(mode);
     }
 
+    public void turn(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(-power);
+        rearLeft.setPower(power);
+        rearRight.setPower(-power);
+    }
+
     public void setPower(double power) {
         frontLeft.setPower(power);
         frontRight.setPower(power);
         rearLeft.setPower(power);
         rearRight.setPower(power);
+    }
+
+    public double getYaw() {
+        return imu.getAngularOrientation().firstAngle;
     }
 }
