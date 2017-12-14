@@ -64,6 +64,13 @@ public class Drive extends Subsystem {
         rearRight.setPower(power);
     }
 
+    public void setTargetPosition(int targetPosition) {
+        frontLeft.setTargetPosition(targetPosition);
+        frontRight.setTargetPosition(targetPosition);
+        rearLeft.setTargetPosition(targetPosition);
+        rearRight.setTargetPosition(targetPosition);
+    }
+
     public double getYaw() {
         return imu.getAngularOrientation().firstAngle;
     }
