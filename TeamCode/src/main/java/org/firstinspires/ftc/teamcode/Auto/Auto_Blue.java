@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.Robot;
 /**
  * Created by AndrewC on 11/25/2017.
  */
-@Autonomous(name = "Mark1Auto")
-public class Mark1Auto extends LinearOpMode {
+@Autonomous(name = "Auto Blue")
+public class Auto_Blue extends LinearOpMode {
     private static final String TAG = "Mark1Auto";
 
     private Robot robot;
@@ -73,30 +73,34 @@ public class Mark1Auto extends LinearOpMode {
         sleep(500);
 
         //Knock off correct jewel
+        relicTrackables.activate();
+        sleep(1000);
         startTime = timer.seconds();
         int targetPosition = 0;
         robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
         if (jewelIsRed) {
-            targetPosition = -80;
+            targetPosition = 160;
         } else {
-            targetPosition = 900;
+            targetPosition = -900;
         }
         robot.drive.setTargetPosition(targetPosition);
         robot.drive.setPower(0.10);
-        while (opModeIsActive() && robot.drive.frontLeft.isBusy() && robot.drive.frontRight.isBusy()) {
 
+        RelicRecoveryVuMark vuMark = null;
+        while (opModeIsActive() && robot.drive.frontLeft.isBusy() && robot.drive.frontRight.isBusy()) {
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
         }
         robot.drive.stop();
         robot.jewel.retract();
+        relicTrackables.deactivate();
         sleep(500);
-
 
         //If backwards, drive to pictograph reading position
         if (jewelIsRed) {
             robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.drive.setTargetPosition(980);
+            robot.drive.setTargetPosition(-1060);
             robot.drive.setPower(0.10);
             while (opModeIsActive() && robot.drive.frontLeft.isBusy() && robot.drive.frontRight.isBusy()) {
 
@@ -105,6 +109,7 @@ public class Mark1Auto extends LinearOpMode {
             sleep(500);
         }
 
+        /*
         //Read pictograph
         RelicRecoveryVuMark vuMark = null;
         relicTrackables.activate();
@@ -117,20 +122,21 @@ public class Mark1Auto extends LinearOpMode {
         }
         relicTrackables.deactivate();
         log("Finished reading pictograph: " + vuMark);
+        */
 
         //Drive to correct column
         switch (vuMark) {
-            case LEFT:
-                targetPosition = 945;
+            case RIGHT:
+                targetPosition = -945;
                 break;
             case CENTER:
-                targetPosition = 630;
+                targetPosition = -630;
                 break;
-            case RIGHT:
-                targetPosition = 315;
+            case LEFT:
+                targetPosition = -315;
                 break;
             default:
-                targetPosition = 630;
+                targetPosition = -630;
         }
         robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
