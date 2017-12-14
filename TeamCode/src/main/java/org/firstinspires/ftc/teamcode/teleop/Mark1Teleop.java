@@ -92,7 +92,7 @@ public class Mark1Teleop extends LinearOpMode {
             if (gamepad2.dpad_left) {
                 robot.relicRecovery.wrist.setPosition(0);
             } else if (gamepad2.dpad_right) {
-                robot.relicRecovery.wrist.setPosition(1);
+                robot.relicRecovery.wrist.setPosition(0.85);
             }
 
             if (gamepad1.dpad_left) {
