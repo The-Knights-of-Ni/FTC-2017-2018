@@ -117,7 +117,7 @@ public class Mark1Teleop extends LinearOpMode {
             //robot.glyft.squeezerRight.setPosition(rightServoPosition);
             robot.relicRecovery.claw.setPosition(clawServoPosition);
             //robot.relicRecovery.wrist.setPosition(rightServoPosition);
-            robot.relicRecovery.relicMotor.setPower(gamepad2.left_stick_y);
+            robot.relicRecovery.relicMotor.setPower(Math.pow(gamepad2.left_stick_y, 3.0));
 
             telemetry.addData("Servo position L", leftServoPosition);
             telemetry.addData("Servo position R", rightServoPosition);
