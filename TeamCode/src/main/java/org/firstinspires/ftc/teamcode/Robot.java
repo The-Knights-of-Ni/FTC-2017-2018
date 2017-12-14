@@ -75,6 +75,7 @@ public class Robot {
         rearRightDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftGlyftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightGlyftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Servos
         jewelServo = hardwareMap.servo.get("jewel_servo");
