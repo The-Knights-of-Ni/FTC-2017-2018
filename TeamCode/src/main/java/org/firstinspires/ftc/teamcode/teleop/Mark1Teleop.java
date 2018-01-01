@@ -64,14 +64,20 @@ public class Mark1Teleop extends LinearOpMode {
             robot.glyft.setPower(motorPower);
 
             if (gamepad1.left_bumper) { //Open
-                robot.glyft.squeezerLeft.setPosition(0.3);
-                robot.glyft.squeezerRight.setPosition(0.45);
+                robot.glyft.squeezerLeft.setPosition(0.25);
+                robot.glyft.squeezerRight.setPosition(0.50);
+                //robot.glyft.squeezerLeft.setPosition(0.35);
+                //robot.glyft.squeezerRight.setPosition(0.4);
             } else if (gamepad1.right_bumper) { //Closed
                 robot.glyft.squeezerLeft.setPosition(0.15);
                 robot.glyft.squeezerRight.setPosition(0.55);
+            } else if (gamepad1.right_trigger > 0.5) { //Really closed
+                //robot.glyft.squeezerLeft.setPosition(0.10);
+                //robot.glyft.squeezerRight.setPosition(0.60);
             }
 
-            if (gamepad2.dpad_up) {
+            /*
+            if (gamepad1.dpad_up) {
                 if (!upWasPressedLastLoop) {
                     rightServoPosition += 0.05;
                     upWasPressedLastLoop = true;
@@ -80,7 +86,7 @@ public class Mark1Teleop extends LinearOpMode {
                 upWasPressedLastLoop = false;
             }
 
-            if (gamepad2.dpad_down) {
+            if (gamepad1.dpad_down) {
                 if (!downWasPressedLastLoop) {
                     rightServoPosition -= 0.05;
                     downWasPressedLastLoop = true;
@@ -88,13 +94,16 @@ public class Mark1Teleop extends LinearOpMode {
             } else {
                 downWasPressedLastLoop = false;
             }
+            rightServoPosition = Range.clip(rightServoPosition, 0.0, 1.0);
+            */
 
-            if (gamepad2.dpad_left) {
+            if (gamepad2.right_bumper) {
                 robot.relicRecovery.wrist.setPosition(0);
-            } else if (gamepad2.dpad_right) {
-                robot.relicRecovery.wrist.setPosition(0.85);
+            } else if (gamepad2.left_bumper) {
+                robot.relicRecovery.wrist.setPosition(0.65);
             }
 
+            /*
             if (gamepad1.dpad_left) {
                 if (!leftWasPressedLastLoop) {
                     clawServoPosition -= 0.05;
@@ -112,6 +121,33 @@ public class Mark1Teleop extends LinearOpMode {
             } else {
                 rightWasPressedLastLoop = false;
             }
+            clawServoPosition = Range.clip(clawServoPosition, 0.0, 1.0);
+            */
+
+            if (gamepad1.left_trigger > 0.5) { //Open
+                robot.intakePivotLeft.setPosition(0.45);
+                robot.intakePivotRight.setPosition(0.10/*0.15*/);
+            } else if (gamepad1.right_trigger > 0.5) { //Closed
+                robot.intakePivotLeft.setPosition(0.00);
+                robot.intakePivotRight.setPosition(0.85/*0.70*/);
+            }
+
+            if (gamepad2.right_trigger > 0.5) {
+                robot.compliantWheelLeft.setPower(0.9);
+                robot.compliantWheelRight.setPower(0.9);
+            } else {
+                robot.compliantWheelLeft.setPower(0);
+                robot.compliantWheelRight.setPower(0);
+            }
+
+            if (gamepad2.dpad_up) {
+                robot.intakePivotRight.setPwmDisable();
+            } else {
+                robot.intakePivotRight.setPwmEnable();
+            }
+
+            //robot.intakePivotLeft.setPosition(clawServoPosition);
+            //robot.intakePivotRight.setPosition(rightServoPosition);
 
             //robot.glyft.squeezerLeft.setPosition(leftServoPosition);
             //robot.glyft.squeezerRight.setPosition(rightServoPosition);
