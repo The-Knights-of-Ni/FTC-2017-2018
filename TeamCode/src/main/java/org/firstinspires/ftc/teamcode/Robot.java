@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
@@ -39,6 +40,8 @@ public class Robot {
     private Servo rightSqueezerServo;
     private Servo relicWristServo;
     private Servo relicClawServo;
+    public ServoImplEx intakePivotLeft;
+    public ServoImplEx intakePivotRight;
 
     //Sensors
     private BNO055IMU imu;
@@ -83,6 +86,8 @@ public class Robot {
         rightSqueezerServo = hardwareMap.servo.get("right_grabber");
         relicWristServo = hardwareMap.servo.get("relic_wrist");
         relicClawServo = hardwareMap.servo.get("relic_claw");
+        intakePivotLeft = (ServoImplEx) hardwareMap.servo.get("left_intake_pivot");
+        intakePivotRight = (ServoImplEx) hardwareMap.servo.get("right_intake_pivot");
 
         //Sensors
         imu = hardwareMap.get(BNO055IMU.class, "imu");
