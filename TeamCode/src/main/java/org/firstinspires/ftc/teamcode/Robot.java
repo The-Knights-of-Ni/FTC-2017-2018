@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -40,6 +41,8 @@ public class Robot {
     private Servo rightSqueezerServo;
     private Servo relicWristServo;
     private Servo relicClawServo;
+    public CRServo compliantWheelLeft;
+    public CRServo compliantWheelRight;
     public ServoImplEx intakePivotLeft;
     public ServoImplEx intakePivotRight;
 
@@ -86,6 +89,9 @@ public class Robot {
         rightSqueezerServo = hardwareMap.servo.get("right_grabber");
         relicWristServo = hardwareMap.servo.get("relic_wrist");
         relicClawServo = hardwareMap.servo.get("relic_claw");
+        compliantWheelLeft = hardwareMap.crservo.get("left_compliant");
+        compliantWheelRight = hardwareMap.crservo.get("right_compliant");
+        compliantWheelRight.setDirection(DcMotorSimple.Direction.REVERSE);
         intakePivotLeft = (ServoImplEx) hardwareMap.servo.get("left_intake_pivot");
         intakePivotRight = (ServoImplEx) hardwareMap.servo.get("right_intake_pivot");
 
