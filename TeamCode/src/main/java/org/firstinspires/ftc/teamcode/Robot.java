@@ -111,7 +111,7 @@ public class Robot {
 
         //Subsystems
         drive = new Drive(frontLeftDriveMotor, frontRightDriveMotor, rearLeftDriveMotor, rearRightDriveMotor, imu, timer);
-        glyft = new Glyft(leftSqueezerServo, rightSqueezerServo, leftGlyftMotor, rightGlyftMotor, timer);
+        glyft = new Glyft(leftSqueezerServo, rightSqueezerServo, leftGlyftMotor, rightGlyftMotor, intakePivotLeft, intakePivotRight, compliantWheelLeft, compliantWheelRight, timer);
         relicRecovery = new RelicRecovery(relicWristServo, relicClawServo, relicMotor, timer);
         jewel = new Jewel(jewelServo, colorSensor, timer);
     }
