@@ -71,6 +71,14 @@ public class Drive extends Subsystem {
         rearRight.setTargetPosition(targetPosition);
     }
 
+    /** Positive encoder values correspond to rightward robot movement */
+    public void strafe(int targetPosition) {
+        frontLeft.setTargetPosition(targetPosition);
+        frontRight.setTargetPosition(-targetPosition);
+        rearLeft.setTargetPosition(-targetPosition);
+        rearRight.setTargetPosition(targetPosition);
+    }
+
     public double getYaw() {
         return imu.getAngularOrientation().firstAngle;
     }
