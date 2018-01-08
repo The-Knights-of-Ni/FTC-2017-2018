@@ -83,6 +83,11 @@ public class Robot {
         rightGlyftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        leftGlyftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGlyftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGlyftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightGlyftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         //Servos
         jewelServo = hardwareMap.servo.get("jewel_servo");
         leftSqueezerServo = hardwareMap.servo.get("left_grabber");
