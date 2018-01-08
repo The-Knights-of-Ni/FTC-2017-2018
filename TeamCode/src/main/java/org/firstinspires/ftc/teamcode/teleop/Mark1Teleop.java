@@ -59,7 +59,7 @@ public class Mark1Teleop extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0.5) {
-                motorPower = -0.40;
+                motorPower = -1.0;
             }
 
             robot.glyft.setPower(motorPower);
@@ -70,7 +70,7 @@ public class Mark1Teleop extends LinearOpMode {
                 //robot.glyft.squeezerLeft.setPosition(0.35);
                 //robot.glyft.squeezerRight.setPosition(0.4);
             } else if (gamepad1.right_bumper) { //Closed
-                robot.glyft.squeezerLeft.setPosition(0.15);
+                robot.glyft.squeezerLeft.setPosition(0.20);
                 robot.glyft.squeezerRight.setPosition(0.55);
             } else if (gamepad1.right_trigger > 0.5) { //Really closed
                 //robot.glyft.squeezerLeft.setPosition(0.10);
