@@ -11,6 +11,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.RelicRecovery.RelicState
  */
 
 public class RelicRecovery {
+    private static final double WRIST_DOWN_POSITION = 0.65;
+    private static final double WRIST_UP_POSITION = 0.00;
 
     public Servo wrist;
     public Servo claw;
@@ -39,8 +41,12 @@ public class RelicRecovery {
         relicState = state;
     }
 
-    public void rotateWrist() {
-        wrist.setPosition(1); // need to test, not sure what position
+    public void rotateWristDown() {
+        wrist.setPosition(WRIST_DOWN_POSITION);
+    }
+
+    public void rotateWristUp() {
+        wrist.setPosition(WRIST_UP_POSITION);
     }
 
     public void deployClaw() {
