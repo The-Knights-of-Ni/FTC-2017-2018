@@ -16,11 +16,11 @@ import static org.firstinspires.ftc.teamcode.subsystems.Glyft.GlyftState.MANUAL;
 public class Glyft {
 
     private static final double VS_LEFT_OPEN_POSITION = 0.35;
-    private static final double VS_RIGHT_OPEN_POSITION = 0.40;
+    private static final double VS_RIGHT_OPEN_POSITION = 0.35;
     private static final double VS_LEFT_CLOSED_POSITION = 0.15;
-    private static final double VS_RIGHT_CLOSED_POSITION = 0.55;
+    private static final double VS_RIGHT_CLOSED_POSITION = 0.50;
     private static final double VS_LEFT_SCORING_POSITION = 0.30;
-    private static final double VS_RIGHT_SCORING_POSITION = 0.45;
+    private static final double VS_RIGHT_SCORING_POSITION = 0.40;
 
     private static final double CW_LEFT_OPEN_POSITION = 0.20;
     private static final double CW_RIGHT_OPEN_POSITION = 0.50;
@@ -74,7 +74,7 @@ public class Glyft {
     */
 
     public void openSqueezers() {
-        squeezerLeft.setPosition(VS_LEFT_OPEN_POSITION );
+        squeezerLeft.setPosition(VS_LEFT_OPEN_POSITION);
         squeezerRight.setPosition(VS_RIGHT_OPEN_POSITION);
     }
 
