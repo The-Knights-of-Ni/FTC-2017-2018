@@ -127,16 +127,16 @@ public class Auto_Blue extends LinearOpMode {
         //Drive to correct column
         switch (vuMark) {
             case RIGHT:
-                targetPosition = -945;
+                targetPosition = -890;
                 break;
             case CENTER:
-                targetPosition = -630;
+                targetPosition = -575;
                 break;
             case LEFT:
-                targetPosition = -315;
+                targetPosition = -260;
                 break;
             default:
-                targetPosition = -630;
+                targetPosition = -575;
         }
         robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
