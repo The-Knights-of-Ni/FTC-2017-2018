@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
@@ -19,93 +20,43 @@ import static org.firstinspires.ftc.teamcode.subsystems.Glyft.GlyftState.SCORING
 
 @TeleOp(name = "Mark 2 Teleop")
 public class Mark2Teleop extends LinearOpMode{
+    ElapsedTime timer;
+    Robot robot;
+
+    private boolean leftWasPressedLastLoop = false;
+    private boolean rightWasPressedLastLoop = false;
+
+    private double clawServoPosition = 0.5;
+
     @Override
     public void runOpMode() {
-        ElapsedTime timer = new ElapsedTime();
-        Robot robot = new Robot(this, timer);
+        timer = new ElapsedTime();
+        robot = new Robot(this, timer);
         telemetry.addLine("Initialization finished. Waiting for start...");
         telemetry.update();
         waitForStart();
+        initServos();
+
         boolean lbWasPressedLastLoop = false;
         boolean rbWasPressedLastLoop = false;
         boolean upWasPressedLastLoop = false;
         boolean downWasPressedLastLoop = false;
-        boolean leftWasPressedLastLoop = false;
-        boolean rightWasPressedLastLoop = false;
-        boolean areStacking = false;
         double leftServoPosition = 0.5;
         double rightServoPosition = 0.5;
-        double clawServoPosition = 0.5;
         double compliantWheelPower = 0;
 
         double stateEnterTime = 0;
         boolean isFirstLoopInState = true;
         boolean isFirstGlyph = true;
 
+        boolean isGlyftMoveTo3 = false;
+
         while (opModeIsActive()) {
-            double leftStickX = gamepad1.left_stick_x;
-            double leftStickY = -gamepad1.left_stick_y;
-            double rightStickX = gamepad1.right_stick_x;
-            double[] motorPowers = calcMotorPowers(leftStickX, leftStickY, rightStickX);
-            robot.drive.rearLeft.setPower(motorPowers[0]);
-            robot.drive.frontLeft.setPower(motorPowers[1]);
-            robot.drive.rearRight.setPower(motorPowers[2]);
-            robot.drive.frontRight.setPower(motorPowers[3]);
-
-            if (gamepad2.right_bumper) {
-                robot.relicRecovery.wrist.setPosition(0);
-            } else if (gamepad2.left_bumper) {
-                robot.relicRecovery.wrist.setPosition(0.65);
-            }
+            controlDrive();
+            controlRelic();
 
             /*
-            if (gamepad1.dpad_left) {
-                if (!leftWasPressedLastLoop) {
-                    clawServoPosition -= 0.05;
-                    leftWasPressedLastLoop = true;
-                }
-            } else {
-                leftWasPressedLastLoop = false;
-            }
-
-            if (gamepad1.dpad_right) {
-                if (!rightWasPressedLastLoop) {
-                    clawServoPosition += 0.05;
-                    rightWasPressedLastLoop = true;
-                }
-            } else {
-                rightWasPressedLastLoop = false;
-            }
-            clawServoPosition = Range.clip(clawServoPosition, 0.0, 1.0);
-            */
-
-            /*
-            if (gamepad1.left_trigger > 0.5) { //Intake Open
-                robot.glyft.setGlyftState(Glyft.GlyftState.LIFTING);
-                compliantWheelPower = 0;
-                /*robot.intakePivotLeft.setPosition(0.20);
-                robot.intakePivotRight.setPosition(0.60);
-                robot.compliantWheelLeft.setPower(compliantWheelPower);
-                robot.compliantWheelRight.setPower(compliantWheelPower);
-            } else if (gamepad1.right_trigger > 0.5) { // Intake Closed
-                robot.glyft.setGlyftState(Glyft.GlyftState.INTAKING);
-                compliantWheelPower = 0.9;
-                /*robot.intakePivotLeft.setPosition(0.005);
-                robot.intakePivotRight.setPosition(0.85/*0.70);
-                robot.compliantWheelLeft.setPower(compliantWheelPower);
-                robot.compliantWheelRight.setPower(compliantWheelPower);
-            } else if (gamepad1.a) { // Scoring Storage
-                robot.glyft.setGlyftState(Glyft.GlyftState.SCORING);
-                compliantWheelPower = 0;
-                /*robot.intakePivotLeft.setPosition(0.45);
-                robot.intakePivotRight.setPosition(0.10/*0.15);
-                robot.compliantWheelLeft.setPower(compliantWheelPower);
-                robot.compliantWheelRight.setPower(compliantWheelPower);
-            } else if (gamepad1.b) {
-                robot.glyft.setGlyftState(STACKING);
-            }
-            */
-
+            TODO: Make sure this is redundant before removing
             if (gamepad1.y)
             {
                 robot.compliantWheelRight.setPower(-0.8);
@@ -114,37 +65,8 @@ public class Mark2Teleop extends LinearOpMode{
             {
                 robot.compliantWheelRight.setPower(compliantWheelPower);
             }
+            */
 
-            if (gamepad2.right_trigger > 0.5) {
-                /*robot.compliantWheelLeft.setPower(0.9);
-                robot.compliantWheelRight.setPower(0.9);*/
-            } else {
-                /*robot.compliantWheelLeft.setPower(0);
-                robot.compliantWheelRight.setPower(0);*/
-            }
-
-            if (gamepad2.dpad_up) {
-                robot.intakePivotRight.setPwmDisable();
-            } else {
-                robot.intakePivotRight.setPwmEnable();
-            }
-
-            if (gamepad1.x)
-            {
-                areStacking = true;
-            }
-
-            //robot.intakePivotLeft.setPosition(clawServoPosition);
-            //robot.intakePivotRight.setPosition(rightServoPosition);
-
-            //robot.glyft.squeezerLeft.setPosition(leftServoPosition);
-            //robot.glyft.squeezerRight.setPosition(rightServoPosition);
-            robot.relicRecovery.claw.setPosition(clawServoPosition);
-            //robot.relicRecovery.wrist.setPosition(rightServoPosition);
-            robot.relicRecovery.relicMotor.setPower(Math.pow(gamepad2.left_stick_y, 3.0));
-
-            telemetry.addData("Glyft State:", robot.glyft.getGlyftState());
-            telemetry.addData("Are stacking:", areStacking);
             //Glyft State Machine
             switch(robot.glyft.getGlyftState()) {
                 case STOPPED:
@@ -153,7 +75,7 @@ public class Mark2Teleop extends LinearOpMode{
                     //Glyft linear slide control
                     double glyftMotorPower;
                     if (gamepad2.a) {
-                        glyftMotorPower = 0.40;
+                        glyftMotorPower = 0.30;
                     } else if (gamepad2.b) {
                         glyftMotorPower = 0.50;
                     } else if (gamepad2.x) {
@@ -173,11 +95,11 @@ public class Mark2Teleop extends LinearOpMode{
 
                     //Vertical squeezer control
                     if (gamepad1.left_bumper) { //Open
-                        robot.glyft.squeezerLeft.setPosition(0.35);
-                        robot.glyft.squeezerRight.setPosition(0.40);
+                        robot.glyft.openSqueezers();
                     } else if (gamepad1.right_bumper) { //Closed
-                        robot.glyft.squeezerLeft.setPosition(0.15);
-                        robot.glyft.squeezerRight.setPosition(0.55);
+                        robot.glyft.closeSqueezers();
+                    } else if (gamepad1.left_trigger > 0.5) { //Semi-open
+                        robot.glyft.scoreSqueezers();
                     }
 
                     if (gamepad1.right_trigger > 0.5) {
@@ -220,6 +142,11 @@ public class Mark2Teleop extends LinearOpMode{
                         robot.glyft.setCWLeftPower(0.9);
                         robot.glyft.setCWRightPower(-0.8);
                     }
+                    if (gamepad2.dpad_up) {
+                        robot.intakePivotRight.setPwmDisable();
+                    } else {
+                        robot.intakePivotRight.setPwmEnable();
+                    }
                     if (gamepad1.a) {
                         isFirstLoopInState = true;
                         robot.glyft.setGlyftState(SCORING);
@@ -232,10 +159,10 @@ public class Mark2Teleop extends LinearOpMode{
                         //robot.glyft.setPower(0.5);
                         isFirstLoopInState = false;
                     }
-                    if (Math.abs(robot.glyft.glyftMotor1.getCurrentPosition()-1514) > 100/*timer.seconds() - stateEnterTime < 1.5/*robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()*/) {
+                    if (Math.abs(robot.glyft.glyftMotor1.getCurrentPosition()-1600) > 100/*timer.seconds() - stateEnterTime < 1.5/*robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()*/) {
                         //double elapsedTime = timer.seconds() - stateEnterTime;
                         //double glyftPower = (elapsedTime/0.5) * 0.75;
-                        robot.glyft.setPower(0.75);
+                        robot.glyft.setPower(1.00);
                         break;
                     }
                     robot.glyft.setPower(0);
@@ -248,7 +175,7 @@ public class Mark2Teleop extends LinearOpMode{
                     if (isFirstLoopInState) {
                         robot.glyft.setCWPower(0);
                         robot.glyft.openCompliantWheels();
-                        sleep(250);
+                        //sleep(250);
                         robot.glyft.openSqueezers();
                         robot.glyft.moveGlyft(0);
                         isFirstLoopInState = false;
@@ -285,6 +212,7 @@ public class Mark2Teleop extends LinearOpMode{
             telemetry.addData("Servo position L", leftServoPosition);
             telemetry.addData("Servo position R", rightServoPosition);
             telemetry.addData("Servo position claw", clawServoPosition);
+            telemetry.addData("Glyft State:", robot.glyft.getGlyftState());
             telemetry.addData("Glyft Motor 1", robot.glyft.glyftMotor1.getCurrentPosition());
             telemetry.addData("Glyft Motor 2", robot.glyft.glyftMotor2.getCurrentPosition());
             telemetry.update();
@@ -304,4 +232,51 @@ public class Mark2Teleop extends LinearOpMode{
         rfPower *= 0.8;
         return new double[]{lrPower, lfPower, rrPower, rfPower};
     }
+
+    private void controlRelic() {
+        //Wrist control
+        if (gamepad2.right_bumper) { //Up
+            robot.relicRecovery.rotateWristUp();
+        } else if (gamepad2.right_trigger > 0.5) { //Down
+            robot.relicRecovery.rotateWristDown();
+        }
+
+        //Claw control
+        if (gamepad2.dpad_left) {
+            if (!leftWasPressedLastLoop) {
+                clawServoPosition -= 0.05;
+                leftWasPressedLastLoop = true;
+            }
+        } else {
+            leftWasPressedLastLoop = false;
+        }
+
+        if (gamepad2.dpad_right) {
+            if (!rightWasPressedLastLoop) {
+                clawServoPosition += 0.05;
+                rightWasPressedLastLoop = true;
+            }
+        } else {
+            rightWasPressedLastLoop = false;
+        }
+        clawServoPosition = Range.clip(clawServoPosition, 0.0, 1.0);
+        robot.relicRecovery.claw.setPosition(clawServoPosition);
+
+        //Linear slide control
+        robot.relicRecovery.relicMotor.setPower(Math.pow(gamepad2.left_stick_y, 3.0));
+    }
+
+    private void controlDrive() {
+        double[] motorPowers = calcMotorPowers(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        robot.drive.rearLeft.setPower(motorPowers[0]);
+        robot.drive.frontLeft.setPower(motorPowers[1]);
+        robot.drive.rearRight.setPower(motorPowers[2]);
+        robot.drive.frontRight.setPower(motorPowers[3]);
+    }
+
+    private void initServos() {
+        robot.relicRecovery.wrist.setPosition(0.65);
+        robot.jewel.retract();
+    }
+
 }
