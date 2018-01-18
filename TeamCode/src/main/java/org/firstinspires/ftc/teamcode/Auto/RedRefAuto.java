@@ -175,6 +175,11 @@ public class RedRefAuto extends LinearOpMode {
             robot.drive.setPower(-0.10);
         }
         robot.drive.stop();
+
+        robot.glyft.moveGlyft(0);
+        while (robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()) {
+
+        }
     }
 
     private void initRobot() {
