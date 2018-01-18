@@ -55,6 +55,19 @@ public class RedRefAuto extends LinearOpMode {
 
         log("Started Mark 1 Auto");
 
+        //Read pictograph
+        RelicRecoveryVuMark vuMark = null;
+        relicTrackables.activate();
+        startTime = timer.seconds();
+        while (opModeIsActive() && (timer.seconds() - startTime) < PICTOGRAPH_TIMEOUT) {
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                break;
+            }
+        }
+        relicTrackables.deactivate();
+        log("Finished reading pictograph: " + vuMark);
+
         //Grab glyft and raise lift
         robot.glyft.closeSqueezers();
         sleep(500);
@@ -114,19 +127,6 @@ public class RedRefAuto extends LinearOpMode {
             robot.drive.stop();
             sleep(500);
         }
-
-        //Read pictograph
-        RelicRecoveryVuMark vuMark = null;
-        relicTrackables.activate();
-        startTime = timer.seconds();
-        while (opModeIsActive() && (timer.seconds() - startTime) < PICTOGRAPH_TIMEOUT) {
-            vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                break;
-            }
-        }
-        relicTrackables.deactivate();
-        log("Finished reading pictograph: " + vuMark);
 
         startTime = timer.seconds();
         while (opModeIsActive() && timer.seconds() - startTime < 0.25) {
