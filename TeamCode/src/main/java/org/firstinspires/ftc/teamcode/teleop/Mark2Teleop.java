@@ -41,8 +41,12 @@ public class Mark2Teleop extends LinearOpMode{
         boolean rbWasPressedLastLoop = false;
         boolean upWasPressedLastLoop = false;
         boolean downWasPressedLastLoop = false;
+        boolean leftWasPressed = false;
+        boolean rightWasPressed = false;
         double leftServoPosition = 0.5;
         double rightServoPosition = 0.5;
+        double offset = 0.0;
+        double pivotOffset = 0.0;
         double compliantWheelPower = 0;
 
         double stateEnterTime = 0;
@@ -93,6 +97,47 @@ public class Mark2Teleop extends LinearOpMode{
                     }
                     robot.glyft.setPower(glyftMotorPower);
 
+                    if (gamepad1.dpad_up) {
+                        if (!upWasPressedLastLoop) {
+                            offset += 0.01;
+                            upWasPressedLastLoop = true;
+                        }
+                    } else {
+                        upWasPressedLastLoop = false;
+                    }
+
+                    if (gamepad1.dpad_down) {
+                        if (!downWasPressedLastLoop) {
+                            offset -= 0.01;
+                            downWasPressedLastLoop = true;
+                        }
+                    } else {
+                        downWasPressedLastLoop = false;
+                    }
+
+                    if (gamepad1.dpad_right) {
+                        if (!rightWasPressed) {
+                            pivotOffset += 0.01;
+                            rightWasPressed = true;
+                        }
+                    } else {
+                        rightWasPressed = false;
+                    }
+
+                    if (gamepad1.dpad_left) {
+                        if (!leftWasPressed) {
+                            pivotOffset -= 0.01;
+                            leftWasPressed = true;
+                        }
+                    } else {
+                        leftWasPressed = false;
+                    }
+
+                    //robot.glyft.squeezerLeft.setPosition(0.15+offset);
+                    //robot.glyft.squeezerRight.setPosition(0.50-offset);
+                    //robot.glyft.intakePivotLeft.setPosition(-pivotOffset);
+                    //robot.glyft.intakePivotRight.setPosition(pivotOffset);
+
                     //Vertical squeezer control
                     if (gamepad1.left_bumper) { //Open
                         robot.glyft.openSqueezers();
@@ -106,6 +151,12 @@ public class Mark2Teleop extends LinearOpMode{
                         robot.glyft.setGlyftState(INTAKING);
                         isFirstLoopInState = true;
                         isFirstGlyph = true;
+                    }
+
+                    if (gamepad1.x)
+                    {
+                        robot.glyft.intakePivotLeft.setPosition(0.3);
+                        robot.glyft.intakePivotRight.setPosition(0.65);
                     }
                     break;
                 case INTAKING:
@@ -176,9 +227,12 @@ public class Mark2Teleop extends LinearOpMode{
                         robot.glyft.setCWPower(0);
                         robot.glyft.openCompliantWheels();
                         //sleep(250);
-                        robot.glyft.openSqueezers();
+                        //robot.glyft.openSqueezers();
                         robot.glyft.moveGlyft(0);
                         isFirstLoopInState = false;
+                    }
+                    if (robot.glyft.glyftMotor1.getCurrentPosition() < 1400) {
+                        robot.glyft.openSqueezers();
                     }
                     if (robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()) {
                         break;
@@ -208,9 +262,10 @@ public class Mark2Teleop extends LinearOpMode{
                     robot.glyft.setGlyftState(MANUAL);
                     break;
             }
-
-            telemetry.addData("Servo position L", leftServoPosition);
-            telemetry.addData("Servo position R", rightServoPosition);
+            telemetry.addData("Squeezer position L", 0.15+offset);
+            telemetry.addData("Squeezer Position R", 0.50-offset);
+            telemetry.addData("Servo position intake L", robot.glyft.intakePivotLeft.getPosition());
+            telemetry.addData("Servo position intake R", robot.glyft.intakePivotRight.getPosition());
             telemetry.addData("Servo position claw", clawServoPosition);
             telemetry.addData("Glyft State:", robot.glyft.getGlyftState());
             telemetry.addData("Glyft Motor 1", robot.glyft.glyftMotor1.getCurrentPosition());
@@ -275,7 +330,6 @@ public class Mark2Teleop extends LinearOpMode{
     }
 
     private void initServos() {
-        robot.relicRecovery.wrist.setPosition(0.65);
         robot.jewel.retract();
     }
 

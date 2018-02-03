@@ -15,18 +15,18 @@ import static org.firstinspires.ftc.teamcode.subsystems.Glyft.GlyftState.MANUAL;
 
 public class Glyft {
 
-    private static final double VS_LEFT_OPEN_POSITION = 0.35;
-    private static final double VS_RIGHT_OPEN_POSITION = 0.35;
-    private static final double VS_LEFT_CLOSED_POSITION = 0.15;
-    private static final double VS_RIGHT_CLOSED_POSITION = 0.50;
-    private static final double VS_LEFT_SCORING_POSITION = 0.30;
+    private static final double VS_LEFT_OPEN_POSITION = 0.33;
+    private static final double VS_RIGHT_OPEN_POSITION = 0.32;
+    private static final double VS_LEFT_CLOSED_POSITION = 0.18;
+    private static final double VS_RIGHT_CLOSED_POSITION = 0.47;
+    private static final double VS_LEFT_SCORING_POSITION = 0.25;
     private static final double VS_RIGHT_SCORING_POSITION = 0.40;
 
-    private static final double CW_LEFT_OPEN_POSITION = 0.20;
-    private static final double CW_RIGHT_OPEN_POSITION = 0.50;
-    private static final double CW_LEFT_INTAKING_POSITION = 0;
-    private static final double CW_RIGHT_INTAKING_POSITION = 0.9;
-    private static final double CW_LEFT_STORED_POSITION = 0.80;
+    private static final double CW_LEFT_OPEN_POSITION = 0.32;
+    private static final double CW_RIGHT_OPEN_POSITION = 0.55;
+    private static final double CW_LEFT_INTAKING_POSITION = 0.22;
+    private static final double CW_RIGHT_INTAKING_POSITION = 0.75;
+    private static final double CW_LEFT_STORED_POSITION = 0.74;
     private static final double CW_RIGHT_STORED_POSITION = 0.00;
 
     public Servo squeezerLeft;

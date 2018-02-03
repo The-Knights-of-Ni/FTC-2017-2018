@@ -11,8 +11,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.RelicRecovery.RelicState
  */
 
 public class RelicRecovery {
-    private static final double WRIST_DOWN_POSITION = 0.65;
-    private static final double WRIST_UP_POSITION = 0.00;
+    private static final double WRIST_DOWN_POSITION = 1.0;
+    private static final double WRIST_UP_POSITION = 0.0; //0.65
 
     public Servo wrist;
     public Servo claw;
