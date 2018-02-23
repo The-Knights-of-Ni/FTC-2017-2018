@@ -24,8 +24,8 @@ public class Glyft {
 
     private static final double CW_LEFT_OPEN_POSITION = 0.32;
     private static final double CW_RIGHT_OPEN_POSITION = 0.55;
-    private static final double CW_LEFT_INTAKING_POSITION = 0.22;
-    private static final double CW_RIGHT_INTAKING_POSITION = 0.75;
+    private static final double CW_LEFT_INTAKING_POSITION = /*0.22*/0.19;
+    private static final double CW_RIGHT_INTAKING_POSITION = /*0.75*/0.80;
     private static final double CW_LEFT_STORED_POSITION = 0.74;
     private static final double CW_RIGHT_STORED_POSITION = 0.00;
 

@@ -162,7 +162,7 @@ public class Mark2Teleop extends LinearOpMode{
                 case INTAKING:
                     //move glyft to the right place
                     robot.glyft.closeCompliantWheels();
-                    robot.glyft.setCWPower(0.9);
+                    robot.glyft.setCWPower(0.8);
 
                     double power = 0.0;
                     if (gamepad2.a) {
@@ -189,15 +189,19 @@ public class Mark2Teleop extends LinearOpMode{
                         isFirstLoopInState = true;
                     }
 
+                    /*
                     if (gamepad1.y) {
                         robot.glyft.setCWLeftPower(0.9);
                         robot.glyft.setCWRightPower(-0.8);
                     }
+                    */
+                    /*
                     if (gamepad2.dpad_up) {
                         robot.intakePivotRight.setPwmDisable();
                     } else {
                         robot.intakePivotRight.setPwmEnable();
                     }
+                    */
                     if (gamepad1.a) {
                         isFirstLoopInState = true;
                         robot.glyft.setGlyftState(SCORING);
@@ -206,18 +210,18 @@ public class Mark2Teleop extends LinearOpMode{
                 case LIFTING:
                     if (isFirstLoopInState) {
                         stateEnterTime = timer.seconds();
-                        robot.glyft.moveGlyft(1700);
-                        //robot.glyft.setPower(0.5);
+                        //robot.glyft.moveGlyft(1700);
+                        robot.glyft.setPower(1.0);
                         isFirstLoopInState = false;
                     }
-                    if (Math.abs(robot.glyft.glyftMotor1.getCurrentPosition()-1600) > 100/*timer.seconds() - stateEnterTime < 1.5/*robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()*/) {
+                    if (Math.abs(robot.glyft.glyftMotor2.getCurrentPosition()-1600) > 100/*timer.seconds() - stateEnterTime < 1.5/*robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()*/) {
                         //double elapsedTime = timer.seconds() - stateEnterTime;
                         //double glyftPower = (elapsedTime/0.5) * 0.75;
                         robot.glyft.setPower(1.00);
                         break;
                     }
                     robot.glyft.setPower(0);
-                    robot.glyft.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    //robot.glyft.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     isFirstGlyph = false;
                     isFirstLoopInState = true;
                     robot.glyft.setGlyftState(INTAKING);
@@ -228,16 +232,22 @@ public class Mark2Teleop extends LinearOpMode{
                         robot.glyft.openCompliantWheels();
                         //sleep(250);
                         //robot.glyft.openSqueezers();
-                        robot.glyft.moveGlyft(0);
+                        //robot.glyft.moveGlyft(0);
+                        robot.glyft.setPower(-1.0);
                         isFirstLoopInState = false;
                     }
-                    if (robot.glyft.glyftMotor1.getCurrentPosition() < 1400) {
+                    if (robot.glyft.glyftMotor2.getCurrentPosition() < 1400) {
                         robot.glyft.openSqueezers();
                     }
+                    /*
                     if (robot.glyft.glyftMotor1.isBusy() && robot.glyft.glyftMotor2.isBusy()) {
                         break;
                     }
-                    robot.glyft.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    */
+                    if (robot.glyft.glyftMotor2.getCurrentPosition() > 0) {
+                        break;
+                    }
+                    //robot.glyft.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     robot.glyft.closeSqueezers();
                     isFirstLoopInState = true;
                     if (isFirstGlyph) {
@@ -262,6 +272,12 @@ public class Mark2Teleop extends LinearOpMode{
                     robot.glyft.setGlyftState(MANUAL);
                     break;
             }
+
+            if (gamepad2.left_stick_button) {
+                robot.glyft.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.glyft.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+
             telemetry.addData("Squeezer position L", 0.15+offset);
             telemetry.addData("Squeezer Position R", 0.50-offset);
             telemetry.addData("Servo position intake L", robot.glyft.intakePivotLeft.getPosition());
@@ -270,6 +286,10 @@ public class Mark2Teleop extends LinearOpMode{
             telemetry.addData("Glyft State:", robot.glyft.getGlyftState());
             telemetry.addData("Glyft Motor 1", robot.glyft.glyftMotor1.getCurrentPosition());
             telemetry.addData("Glyft Motor 2", robot.glyft.glyftMotor2.getCurrentPosition());
+            telemetry.addData("LR", robot.drive.rearLeft.getCurrentPosition());
+            telemetry.addData("LF", robot.drive.frontLeft.getCurrentPosition());
+            telemetry.addData("RR", robot.drive.rearRight.getCurrentPosition());
+            telemetry.addData("RF", robot.drive.frontRight.getCurrentPosition());
             telemetry.update();
         }
     }
@@ -306,6 +326,7 @@ public class Mark2Teleop extends LinearOpMode{
             leftWasPressedLastLoop = false;
         }
 
+        /*
         if (gamepad2.dpad_right) {
             if (!rightWasPressedLastLoop) {
                 clawServoPosition += 0.05;
@@ -314,11 +335,17 @@ public class Mark2Teleop extends LinearOpMode{
         } else {
             rightWasPressedLastLoop = false;
         }
+        */
+
+        if (gamepad2.dpad_right) {
+            clawServoPosition = 0.90;
+        }
+
         clawServoPosition = Range.clip(clawServoPosition, 0.0, 1.0);
         robot.relicRecovery.claw.setPosition(clawServoPosition);
 
         //Linear slide control
-        robot.relicRecovery.relicMotor.setPower(Math.pow(gamepad2.left_stick_y, 3.0));
+        robot.relicRecovery.relicMotor.setPower(Math.pow(gamepad2.right_stick_y, 3.0));
     }
 
     private void controlDrive() {
