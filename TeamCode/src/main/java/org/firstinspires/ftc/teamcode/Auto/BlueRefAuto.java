@@ -38,9 +38,9 @@ public class BlueRefAuto extends LinearOpMode {
     private static final double     TURN_SPEED              = 0.5;
 
     //Timing Constants
-    private static final int PICTOGRAPH_TIMEOUT = 5000;
+    private static final double PICTOGRAPH_TIMEOUT = 5.0;
     private static final int JEWEL_DEPLOY_WAIT = 1500;
-    private static final double GLYFT_LIFT_TIME = 0.40;
+    private static final double GLYFT_LIFT_TIME = 0.50;
 
     //Encoder Constants
 
@@ -91,7 +91,7 @@ public class BlueRefAuto extends LinearOpMode {
         robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
         if (jewelIsRed) {
-            targetPosition = 80;
+            targetPosition = 100;
         } else {
             targetPosition = -900;
         }
@@ -109,7 +109,7 @@ public class BlueRefAuto extends LinearOpMode {
         if (jewelIsRed) {
             robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.drive.setTargetPosition(-980);
+            robot.drive.setTargetPosition(-1000);
             robot.drive.setPower(0.10);
             while (opModeIsActive() && robot.drive.frontLeft.isBusy() && robot.drive.frontRight.isBusy()) {
 

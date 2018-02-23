@@ -38,7 +38,7 @@ public class Auto_Blue extends LinearOpMode {
     private static final double     TURN_SPEED              = 0.5;
 
     //Timing Constants
-    private static final int PICTOGRAPH_TIMEOUT = 5000;
+    private static final int PICTOGRAPH_TIMEOUT = 5;
     private static final int JEWEL_DEPLOY_WAIT = 1500;
     private static final double GLYFT_LIFT_TIME = 0.25;
 

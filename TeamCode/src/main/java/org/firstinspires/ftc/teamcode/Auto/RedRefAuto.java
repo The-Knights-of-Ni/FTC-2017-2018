@@ -38,9 +38,9 @@ public class RedRefAuto extends LinearOpMode {
     private static final double     TURN_SPEED              = 0.5;
 
     //Timing Constants
-    private static final int PICTOGRAPH_TIMEOUT = 5000;
+    private static final double PICTOGRAPH_TIMEOUT = 5.0;
     private static final int JEWEL_DEPLOY_WAIT = 1500;
-    private static final double GLYFT_LIFT_TIME = 0.25;
+    private static final double GLYFT_LIFT_TIME = 0.50;
 
     //Encoder Constants
 
@@ -93,7 +93,7 @@ public class RedRefAuto extends LinearOpMode {
         if (jewelIsRed) {
             targetPosition = -100;
         } else {
-            targetPosition = 80;
+            targetPosition = 100;
         }
         robot.drive.setTargetPosition(targetPosition);
         robot.drive.setPower(0.10);
@@ -101,7 +101,9 @@ public class RedRefAuto extends LinearOpMode {
 
         }
         robot.drive.stop();
-        robot.jewel.retract();
+        if (jewelIsRed) {
+            robot.jewel.retract();
+        }
         sleep(500);
 
 
@@ -119,20 +121,23 @@ public class RedRefAuto extends LinearOpMode {
         } else {
             robot.drive.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.drive.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.drive.setTargetPosition(820);
+            robot.drive.setTargetPosition(800);
             robot.drive.setPower(0.10);
             while (opModeIsActive() && robot.drive.frontLeft.isBusy() && robot.drive.frontRight.isBusy()) {
 
             }
             robot.drive.stop();
+            robot.jewel.retract();
             sleep(500);
         }
 
+        /*
         startTime = timer.seconds();
         while (opModeIsActive() && timer.seconds() - startTime < 0.25) {
             robot.drive.setPower(0.20);
         }
         robot.drive.stop();
+        */
 
         //Drive to correct column
         switch (vuMark) {
